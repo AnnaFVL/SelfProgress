@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">SelfProgressCompose</string>
+    <string name="app_name">Self Progress</string>
+
+    <string name="header_text">Мои спортивные успехи</string>
+    <string name="result_calc_button">Посчитать прогресс</string>
+    <string name="result_text">Результат</string>
+
+    <string name="mon">понедельник</string>
+    <string name="tue">вторник</string>
+    <string name="wed">среда</string>
+    <string name="thur">четверг</string>
+    <string name="fri">пятница</string>
+    <string name="sat">суббота</string>
+    <string name="sun">воскресенье</string>
+
+    <string name="basic">зарядка</string>
+    <string name="cardio">кардио</string>
+    <string name="press">пресс</string>
+    <string name="stretching">растяжка</string>
 </resources>

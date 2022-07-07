@@ -15,169 +15,165 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-//import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
 
-            Text(text="Мои спортивные успехи",
+            val weekDayList = listOf(stringResource(id = R.string.mon), stringResource(id = R.string.tue),
+                stringResource(id = R.string.wed), stringResource(id = R.string.thur),
+                stringResource(id = R.string.fri), stringResource(id = R.string.sat),
+                stringResource(id = R.string.sun))
+            val activityList = listOf(stringResource(id = R.string.basic), stringResource(id = R.string.cardio),
+                stringResource(id = R.string.press), stringResource(id = R.string.stretching))
+            val basicCheckBoxList = remember {
+                listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false))
+            }
+            val cardioCheckBoxList = remember {
+                listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false))
+            }
+            val pressCheckBoxList = remember {
+                listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false))
+            }
+            val stretchingCheckBoxList = remember {
+                listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+                    mutableStateOf(false))
+            }
+
+            val selfProgressResult = remember { mutableStateOf("Сейчас посчитаем...") }
+            //val basic1CheckBox = remember { mutableStateOf(false) }
+
+            //////
+            // Заголовок
+            //////
+            Text(text= stringResource(id = R.string.header_text),
                 fontSize = 18.sp,
                 modifier = Modifier.padding(start=20.dp, top=10.dp))
+
+            //////
+            // Таблица
+            //////
             Column(
                 modifier = Modifier
                     .padding(start = 20.dp, top = 40.dp, end = 20.dp)
-                    .background(Color.Gray)
+                    .background(Color.White)
             ) {
 
                 Row(
                     modifier = Modifier
-                        .background(Color.Blue)
+                        .background(Color.DarkGray)
                         .height(20.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
-                            .background(Color.Green)
-                            .width(80.dp),
-                    ) {
+                            .background(Color.Gray)
+                            .size(80.dp, 20.dp)
+                    )
+                    for (activityItem in activityList) {
                         Box(
-                            modifier = Modifier
-                                .background(Color.Yellow)
-                                .size(20.dp)
-                        )
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(activityItem, fontSize = 10.sp,
+                                modifier = Modifier.fillMaxSize(),
+                                color = Color.White)
+                        }
                     }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Magenta)
-                            .weight(1f)
-                    ) {
-                        Text("зарядка", fontSize = 8.sp,
-                            modifier = Modifier.fillMaxSize())
-                    }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Magenta)
-                            .weight(1f)
-                    ) {
-                        Text("кардио", fontSize = 8.sp)
-                    }
-                    Column(modifier = Modifier
-                        .background(Color.Magenta)
-                        .weight(1f)
-                    ) {
-                        Text("пресс", fontSize = 8.sp)
-                    }
-                    Column(modifier = Modifier
-                        .background(Color.Magenta)
-                        .weight(1f)
-                    ) {
-                        Text("растяжка", fontSize = 8.sp)
-                    }
-
                 }
+
                 Row(
                 ) {
                     Column(
                         modifier = Modifier
-                            .background(Color.Red)
+                            .background(Color.DarkGray)
                             .height(330.dp)
                             .width(80.dp),
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
-                        Text("понедельник", fontSize = 8.sp)
-                        Text("вторник", fontSize = 8.sp)
-                        Text("среда", fontSize = 8.sp)
-                        Text("четверг", fontSize = 8.sp)
-                        Text("пятница", fontSize = 8.sp)
-                        Text("суббота", fontSize = 8.sp)
-                        Text("воскресенье", fontSize = 8.sp)
-
+                        for (weekDay in weekDayList) {
+                            Text(weekDay, fontSize = 10.sp, color = Color.White)
+                        }
                     }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Cyan)
-                            .height(330.dp)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
+                    for (activityItem in activityList) {
+                        Column(
+                            modifier = Modifier
+                                .height(330.dp)
+                                .weight(1f),
+                            verticalArrangement = Arrangement.Top
+                        ) {
+                            var currentCheckBoxList = listOf<MutableState<Boolean>>()
+                            when (activityItem) {
+                                stringResource(id = R.string.basic) -> currentCheckBoxList = basicCheckBoxList
+                                stringResource(id = R.string.cardio) -> currentCheckBoxList = cardioCheckBoxList
+                                stringResource(id = R.string.press) -> currentCheckBoxList = pressCheckBoxList
+                                stringResource(id = R.string.stretching) -> currentCheckBoxList = stretchingCheckBoxList
+                            }
+                            for (weekDayNumber in weekDayList.indices) {
+                                Checkbox(checked = currentCheckBoxList[weekDayNumber].value,
+                                    onCheckedChange = {
+                                        currentCheckBoxList[weekDayNumber].value = it
+                                    })
+                            }
+                            /*
+                            for (weekDayNumber in weekDayList.indices) {
+                                Checkbox(checked = basicCheckBoxList[weekDayNumber].value,
+                                    onCheckedChange = { basicCheckBoxList[weekDayNumber].value = it })
+                            }*/
+                            //Checkbox(checked = basic1CheckBox.value, onCheckedChange = { basic1CheckBox.value = it })
+                            //Checkbox(checked = false, onCheckedChange = {  })
 
-                    }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Cyan)
-                            .height(330.dp)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-
-                    }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Cyan)
-                            .height(330.dp)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-
-                    }
-                    Column(
-                        modifier = Modifier
-                            .background(Color.Cyan)
-                            .height(330.dp)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-                        Checkbox(checked = false, onCheckedChange = {  })
-
+                        }
                     }
 
                 }
             }
+
+            //////
+            // Кнопка
+            //////
             Button(
-                onClick = {  },
-                modifier = Modifier.padding(start=20.dp, top=400.dp, end=20.dp).fillMaxWidth()) {
-                Text("Посчитать прогресс", fontSize = 18.sp)
+                onClick = {
+                          val random = java.util.Random().nextInt(5)
+                    when (random) {
+                        0 -> selfProgressResult.value = "Надо больше стараться!"
+                        1 -> selfProgressResult.value = "Неплохо! Может не все удалось, но ты старалась"
+                        2 -> selfProgressResult.value = "Статус: герой ;)"
+                        3 -> selfProgressResult.value = "Кто будет лениться, тот конфетки не ест ;)"
+                        4 -> selfProgressResult.value = "Отлично! Все получилось!"
+                    }
+                },
+                modifier = Modifier
+                    .padding(start = 20.dp, top = 400.dp, end = 20.dp)
+                    .fillMaxWidth()) {
+                Text(stringResource(id = R.string.result_calc_button), fontSize = 18.sp)
             }
-            Text(text="Результат",
+
+            //////
+            // Результат
+            //////
+            Text(text=stringResource(id = R.string.result_text),
                 fontSize = 10.sp,
                 modifier = Modifier.padding(start=20.dp, top=450.dp))
-            Text(text="Сейчас посчитаем...",
+            Text(text=selfProgressResult.value,
                 fontSize = 18.sp,
                 modifier = Modifier.padding(start=20.dp, top=470.dp))
 
@@ -193,170 +189,5 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
- /*
-    Text(text="Мои спортивные успехи",
-        fontSize = 18.sp,
-        modifier = Modifier.padding(start=20.dp, top=10.dp))
-    Column(
-        modifier = Modifier
-            .padding(start = 20.dp, top = 40.dp, end = 20.dp)
-            .background(Color.Gray)
-    ) {
 
-        Row(
-            modifier = Modifier
-                .background(Color.Blue)
-                .height(20.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Column(
-                modifier = Modifier
-                    .background(Color.Green)
-                    .width(80.dp),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Yellow)
-                        .size(20.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Magenta)
-                    .weight(1f)
-            ) {
-                Text("зарядка", fontSize = 8.sp,
-                modifier = Modifier.fillMaxSize())
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Magenta)
-                    .weight(1f)
-            ) {
-                Text("кардио", fontSize = 8.sp)
-            }
-            Column(modifier = Modifier
-                .background(Color.Magenta)
-                .weight(1f)
-            ) {
-                Text("пресс", fontSize = 8.sp)
-            }
-            Column(modifier = Modifier
-                .background(Color.Magenta)
-                .weight(1f)
-            ) {
-                Text("растяжка", fontSize = 8.sp)
-            }
-
-        }
-        Row(
-        ) {
-            Column(
-                modifier = Modifier
-                    .background(Color.Red)
-                    .height(330.dp)
-                    .width(80.dp),
-                verticalArrangement = Arrangement.SpaceAround
-            ) {
-                Text("понедельник", fontSize = 8.sp)
-                Text("вторник", fontSize = 8.sp)
-                Text("среда", fontSize = 8.sp)
-                Text("четверг", fontSize = 8.sp)
-                Text("пятница", fontSize = 8.sp)
-                Text("суббота", fontSize = 8.sp)
-                Text("воскресенье", fontSize = 8.sp)
-
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Cyan)
-                    .height(330.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Cyan)
-                    .height(330.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Cyan)
-                    .height(330.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-
-            }
-            Column(
-                modifier = Modifier
-                    .background(Color.Cyan)
-                    .height(330.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-                Checkbox(checked = false, onCheckedChange = {  })
-
-            }
-
-        }
-    }
-    Button(
-        onClick = {  },
-        modifier = Modifier.padding(start=20.dp, top=400.dp, end=20.dp).fillMaxWidth()) {
-        Text("Посчитать прогресс", fontSize = 18.sp)
-    }
-    Text(text="Результат",
-        fontSize = 10.sp,
-        modifier = Modifier.padding(start=20.dp, top=450.dp))
-    Text(text="Сейчас посчитаем...",
-        fontSize = 18.sp,
-        modifier = Modifier.padding(start=20.dp, top=470.dp))
-*/
-
-
-/*val count = remember{mutableStateOf(0)}
-
-    Text(text="Clicks: ${count.value}",
-        fontSize = 18.sp,
-        modifier = Modifier.background(Color.Yellow).size(300.dp, 100.dp).clickable { count.value += 1 }
-    )*/
-    /*
-    SelfProgressComposeTheme {
-        Greeting("Android")
-    }*/
 }
