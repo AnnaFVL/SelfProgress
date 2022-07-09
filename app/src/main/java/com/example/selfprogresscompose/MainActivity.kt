@@ -3,13 +3,13 @@ package com.example.selfprogresscompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.selfprogresscompose.ui.theme.SelfProgressComposeTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +23,9 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.selfprogresscompose.ui.theme.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,44 +60,70 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(false))
             }
 
+            val model: MainActivityViewModel by viewModels()
+
             val selfProgressResult = remember { mutableStateOf("Сейчас посчитаем...") }
             //val basic1CheckBox = remember { mutableStateOf(false) }
+
+            //////
+            // Настройка размеров и цветов
+            //////
+            val headerTextSize: TextUnit = 18.sp
+            val captionTextSize: TextUnit = 10.sp
+            val tableCaptionTextSize: TextUnit = 10.sp
+
+            val basicTextColor: Color = DarkBlue
+            val badTextColor: Color = Red
+            val normalTextColor: Color = Yellow
+            val goodTextColor: Color = Green
+            val tableTextColor: Color = Color.White
+            val checkBoxColor: Color = Orange
+            val checkBoxSubColor: Color = DarkOrange
+            val tableHeaderColor: Color = LightPurple
+            val tableSubHeaderColor: Color = PalePurple
+            val buttonColor: Color = DarkPurple
+
+            val borderPadding = 20.dp
+            val tableHeaderRowSize = 20.dp
+            val tableHeaderColumnSize = 80.dp
+
 
             //////
             // Заголовок
             //////
             Text(text= stringResource(id = R.string.header_text),
-                fontSize = 18.sp,
-                modifier = Modifier.padding(start=20.dp, top=10.dp))
+                fontSize = headerTextSize,
+                color = basicTextColor,
+                modifier = Modifier.padding(start=borderPadding, top=10.dp))
 
             //////
             // Таблица
             //////
             Column(
                 modifier = Modifier
-                    .padding(start = 20.dp, top = 40.dp, end = 20.dp)
+                    .padding(start = borderPadding, top = 40.dp, end = borderPadding)
                     .background(Color.White)
             ) {
 
                 Row(
                     modifier = Modifier
-                        .background(Color.DarkGray)
-                        .height(20.dp)
+                        .background(tableHeaderColor)
+                        .height(tableHeaderRowSize)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Box(
                         modifier = Modifier
-                            .background(Color.Gray)
-                            .size(80.dp, 20.dp)
+                            .background(tableSubHeaderColor)
+                            .size(tableHeaderColumnSize, tableHeaderRowSize)
                     )
                     for (activityItem in activityList) {
                         Box(
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text(activityItem, fontSize = 10.sp,
+                            Text(activityItem, fontSize = tableCaptionTextSize,
                                 modifier = Modifier.fillMaxSize(),
-                                color = Color.White)
+                                color = tableTextColor)
                         }
                     }
                 }
@@ -104,13 +132,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column(
                         modifier = Modifier
-                            .background(Color.DarkGray)
+                            .background(tableHeaderColor)
                             .height(330.dp)
-                            .width(80.dp),
+                            .width(tableHeaderColumnSize),
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
                         for (weekDay in weekDayList) {
-                            Text(weekDay, fontSize = 10.sp, color = Color.White)
+                            Text(weekDay, fontSize = tableCaptionTextSize, color = tableTextColor)
                         }
                     }
                     for (activityItem in activityList) {
@@ -131,7 +159,8 @@ class MainActivity : ComponentActivity() {
                                 Checkbox(checked = currentCheckBoxList[weekDayNumber].value,
                                     onCheckedChange = {
                                         currentCheckBoxList[weekDayNumber].value = it
-                                    })
+                                    },
+                                    colors  = CheckboxDefaults.colors(checkedColor = checkBoxColor, checkmarkColor = checkBoxSubColor))
                             }
                             /*
                             for (weekDayNumber in weekDayList.indices) {
@@ -161,21 +190,24 @@ class MainActivity : ComponentActivity() {
                         4 -> selfProgressResult.value = "Отлично! Все получилось!"
                     }
                 },
+                colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor, contentColor = Color.White),
                 modifier = Modifier
-                    .padding(start = 20.dp, top = 400.dp, end = 20.dp)
+                    .padding(start = borderPadding, top = 400.dp, end = borderPadding)
                     .fillMaxWidth()) {
-                Text(stringResource(id = R.string.result_calc_button), fontSize = 18.sp)
+                Text(stringResource(id = R.string.result_calc_button), fontSize = headerTextSize)
             }
 
             //////
             // Результат
             //////
             Text(text=stringResource(id = R.string.result_text),
-                fontSize = 10.sp,
-                modifier = Modifier.padding(start=20.dp, top=450.dp))
-            Text(text=selfProgressResult.value,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(start=20.dp, top=470.dp))
+                fontSize = captionTextSize,
+                color = basicTextColor,
+                modifier = Modifier.padding(start=borderPadding, top=450.dp))
+            Text(text=model.getCalculatedResult(), //selfProgressResult.value, // model.getCalculatedResult()
+                fontSize = headerTextSize,
+                color = goodTextColor,
+                modifier = Modifier.padding(start=borderPadding, top=470.dp))
 
         }
     }
