@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,174 +44,110 @@ class MainActivity : ComponentActivity() {
         val uiState = model.uiState
 
 
-        val weekDayList = listOf(getString(R.string.mon), getString(R.string.tue), getString(R.string.wed),
-            getString(R.string.thur), getString(R.string.fri), getString(R.string.sat), getString(R.string.sun))
-        /*
-            stringResource(id = R.string.mon), stringResource(id = R.string.tue),
-            stringResource(id = R.string.wed), stringResource(id = R.string.thur),
-            stringResource(id = R.string.fri), stringResource(id = R.string.sat),
-            stringResource(id = R.string.sun))*/
-        val activityList = listOf(getString(R.string.basic), getString(R.string.cardio), getString(R.string.press), getString(R.string.stretching))
-            /*stringResource(id = R.string.basic), stringResource(id = R.string.cardio),
-            stringResource(id = R.string.press), stringResource(id = R.string.stretching))*/
-
-
         super.onCreate(savedInstanceState)
         setContent {
 
-            //////
-            // Настройка размеров и цветов
-            //////
-            val headerTextSize: TextUnit = 18.sp
-            val captionTextSize: TextUnit = 10.sp
-            val tableCaptionTextSize: TextUnit = 10.sp
-
-            val basicTextColor: Color = DarkBlue
-            val badTextColor: Color = Red
-            val normalTextColor: Color = Yellow
-            val goodTextColor: Color = Green
-            val tableTextColor: Color = Color.White
-            val checkBoxColor: Color = Orange
-            val checkBoxSubColor: Color = DarkOrange
-            val tableHeaderColor: Color = LightPurple
-            val tableSubHeaderColor: Color = PalePurple
-            val buttonColor: Color = DarkPurple
-
-            val borderPadding = 20.dp
-            val tableHeaderRowSize = 20.dp
-            val tableHeaderColumnSize = 80.dp
-
-
-            //////
-            // Заголовок
-            //////
-            Text(text= stringResource(id = R.string.header_text),
-                fontSize = headerTextSize,
-                color = basicTextColor,
-                modifier = Modifier.padding(start=borderPadding, top=10.dp))
-
-            //////
-            // Таблица
-            //////
-            Column(
-                modifier = Modifier
-                    .padding(start = borderPadding, top = 40.dp, end = borderPadding)
-                    .background(Color.White)
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .background(tableHeaderColor)
-                        .height(tableHeaderRowSize)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .background(tableSubHeaderColor)
-                            .size(tableHeaderColumnSize, tableHeaderRowSize)
-                    )
-                    for (activityItem in activityList) {
-                        Box(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(activityItem, fontSize = tableCaptionTextSize,
-                                modifier = Modifier.fillMaxSize(),
-                                color = tableTextColor)
-                        }
-                    }
-                }
-
-                Row(
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .background(tableHeaderColor)
-                            .height(330.dp)
-                            .width(tableHeaderColumnSize),
-                        verticalArrangement = Arrangement.SpaceAround
-                    ) {
-                        for (weekDay in weekDayList) {
-                            Text(weekDay, fontSize = tableCaptionTextSize, color = tableTextColor)
-                        }
-                    }
-                    for (activityItem in activityList) {
-                        Column(
-                            modifier = Modifier
-                                .height(330.dp)
-                                .weight(1f),
-                            verticalArrangement = Arrangement.Top
-                        ) {
-
-                            for (weekDayNumber in weekDayList.indices) {
-
-                                // val mutableState = remember { mutableStateOf(значение) }
-                                when (activityItem) {
-                                    getString(R.string.basic) -> DrawCheckBox( uiState.basicList[weekDayNumber]) //model.getBasicList()[weekDayNumber] = it
-                                    getString(R.string.cardio) -> DrawCheckBox( uiState.cardioList[weekDayNumber])
-                                    getString(R.string.press) -> DrawCheckBox( uiState.pressList[weekDayNumber])
-                                    getString(R.string.stretching) -> DrawCheckBox( uiState.stretchingList[weekDayNumber])
-                                }
-
-                            }
-
-                    }
-
-                }
-            }
-
-            //////
-            // Кнопка
-            //////
-            Button(
-                onClick = { /*caclResult(model, context)*/ },
-                colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor, contentColor = Color.White),
-                modifier = Modifier
-                    .padding(start = borderPadding, top = 400.dp, end = borderPadding)
-                    .fillMaxWidth()) {
-                Text(stringResource(id = R.string.result_calc_button), fontSize = headerTextSize)
-            }
-
-            //////
-            // Результат
-            //////
-            Text(text=stringResource(id = R.string.result_text),
-                fontSize = captionTextSize,
-                color = basicTextColor,
-                modifier = Modifier.padding(start=borderPadding, top=450.dp))
-            Text(text=model.resultText, // model.getCalculatedResult()
-                fontSize = headerTextSize,
-                color = goodTextColor,
-                modifier = Modifier.padding(start=borderPadding, top=470.dp))
+            DefaultPreview()
 
         }
     }
 }
 
+
 @Composable
-fun DrawCheckBox(checkBoxState: Boolean) {
-
-    val checkBoxColor: Color = Orange
-    val checkBoxSubColor: Color = DarkOrange
-
-    Checkbox(checked = checkBoxState,
-        onCheckedChange = {
-            //checkBoxState = it
-        },
-        colors  = CheckboxDefaults.colors(checkedColor = checkBoxColor, checkmarkColor = checkBoxSubColor))
-
-    }
-
-
+fun DrawTitle() {
+    Spacer(modifier = Modifier.height(10.dp))
+    Text(text= stringResource(id = R.string.header_text),
+        style = Typography.subtitle1)
+    Spacer(modifier = Modifier.height(10.dp))
 }
 
-/*
-fun caclResult(model: MainActivityViewModel, context: Context) {
-    model.saveListsValues(context)
-}*/
+@Composable
+fun DrawTable() {
+    val heightOfFirstRaw = 20.dp
+    val widthOfFirstColumn = 80.dp
+    val tableHeight = 350.dp
+
+    Row(modifier = Modifier.background(Color.White)
+        .fillMaxWidth()
+        .height(tableHeight)) {
+        Column(modifier = Modifier.background(LightPurple)
+            .width(widthOfFirstColumn)) {
+            Box(modifier = Modifier.background(DarkOrange)
+                    .height(heightOfFirstRaw)
+                    .width(widthOfFirstColumn)
+            )
+            Column(modifier = Modifier.fillMaxHeight(1f),
+                verticalArrangement = Arrangement.SpaceAround) {
+                for (day in WeekDays.dayList) {
+                    Text(
+                        text = day, style = Typography.subtitle2,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+        for (activityItem in SportActivities.sportList) {
+            Column(modifier = Modifier.weight(1f)) {
+                Box(modifier = Modifier.background(LightPurple)
+                    .height(heightOfFirstRaw)
+                    .fillMaxWidth()) {
+                        Text(text = activityItem,
+                        style = Typography.subtitle2,
+                        modifier = Modifier.padding(top = 2.dp).fillMaxWidth(1f),
+                        textAlign = TextAlign.Center)
+                }
+                for (day in WeekDays.dayList) {
+                    Checkbox(checked = false,
+                        onCheckedChange = {
+                            //checkBoxState = it
+                        },
+                        colors  = CheckboxDefaults.colors(Orange, DarkOrange),
+                        modifier = Modifier.fillMaxWidth(1f))
+
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun DrawResultLayout() {
+    Spacer(modifier = Modifier.height(10.dp))
+    Button(
+        onClick = { /*caclResult(model, context)*/ },
+        colors = ButtonDefaults.buttonColors(backgroundColor = DarkPurple),
+        modifier = Modifier.fillMaxWidth()) {
+        Text(stringResource(id = R.string.result_calc_button), style = Typography.button)
+    }
+
+    Spacer(modifier = Modifier.height(6.dp))
+    Text(text=stringResource(id = R.string.result_text),
+        style = Typography.caption)
+
+    Spacer(modifier = Modifier.height(6.dp))
+    Text(text="Test text", //model.resultText, // model.getCalculatedResult()
+        style = Typography.subtitle1)
+    Spacer(modifier = Modifier.height(10.dp))
+}
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
 
+    Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
+        DrawTitle()
+        DrawTable()
+        DrawResultLayout()
+    }
+
+}
+
+object WeekDays {
+    val dayList = listOf("понедельник", "вторник", "среда", "четверг", "пятница", "суббота", "воскресенье")
+}
+
+object SportActivities {
+    val sportList = listOf("зарядка", "кардио", "пресс", "растяжка")
 }
