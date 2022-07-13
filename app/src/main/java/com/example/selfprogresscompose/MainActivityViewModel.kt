@@ -8,80 +8,71 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+//////
+// Выполненные спотривные активности по дням недели
+//////
 data class UiState(
-    val tmpList : MutableList<Boolean>  = mutableListOf (false, false, false, false, false, false, false)
+    val basicList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
+    val cardioList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
+    val pressList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
+    val stretchingList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false)
 )
 
+//////
+// Хранит текущее состояние, считает результат, сохраняет и считывает состояние в sharedPreferences
+//////
 class MainActivityViewModel: ViewModel() {
-    private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
-
-    private val resultText = "Test" //Resources.getSystem().getString(R.string.result_text_unknown)
-
-    private val basicList = mutableListOf (false, false, false, false, false, false, false)
-    private val cardioList = mutableListOf (false, false, false, false, false, false, false)
-    private val pressList = mutableListOf (false, false, false, false, false, false, false)
-    private val stretchingList = mutableListOf (false, false, false, false, false, false, false)
-
-
 
     var uiState by mutableStateOf(UiState())
-        private set
+    var resultText = "Сейчас посчитаем..." //Resources.getSystem().getString(R.string.result_text_unknown)
+
+    private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
 
 
-    fun getCalculatedResult(): String {
-        return resultText
+    fun сalculatedResult() {
+        val random = java.util.Random().nextInt(5)
+        when (random) {
+            0 -> resultText = "Надо больше стараться!"
+            1 -> resultText = "Неплохо! Может не все удалось, но ты старалась"
+            2 -> resultText = "Статус: герой ;)"
+            3 -> resultText = "Кто будет лениться, тот конфетки не ест ;)"
+            4 -> resultText = "Отлично! Все получилось!"
+        }
     }
 
-    fun getBasicList(): MutableList<Boolean> {
-        return basicList
-    }
-
-    fun getCardioList(): MutableList<Boolean> {
-        return cardioList
-    }
-
-    fun getPressList(): MutableList<Boolean> {
-        return pressList
-    }
-
-    fun getStretchingList(): MutableList<Boolean> {
-        return stretchingList
-    }
-
-    fun getListsValues(context: Context) {
+    fun readSharePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
-        /*for (index in basicList.indices) {
-            if (boolList[index].value)
-            basicList[index] = sharedPreferences.getBoolean("basic$index", false)
+        for (index in uiState.basicList.indices) {
+            uiState.basicList[index] = sharedPreferences.getBoolean("basic$index", false)
         }
-        for (index in cardioList.indices) {
-            cardioList[index] = sharedPreferences.getBoolean("cardio$index", false)
+        for (index in uiState.cardioList.indices) {
+            uiState.cardioList[index] = sharedPreferences.getBoolean("cardio$index", false)
         }
-        for (index in pressList.indices) {
-            pressList[index] = sharedPreferences.getBoolean("press$index", false)
+        for (index in uiState.pressList.indices) {
+            uiState.pressList[index] = sharedPreferences.getBoolean("press$index", false)
         }
-        for (index in stretchingList.indices) {
-            stretchingList[index] = sharedPreferences.getBoolean("stretching$index", false)
-        }*/
+        for (index in uiState.stretchingList.indices) {
+            uiState.stretchingList[index] = sharedPreferences.getBoolean("stretching$index", false)
+        }
 
     }
 
-    fun saveListsValues(context: Context) {
+    fun writeSharePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        /*for (index in basicList.indices) {
-            editor.putBoolean("basic$index", basicList[index])
+        for (index in uiState.basicList.indices) {
+            editor.putBoolean("basic$index", uiState.basicList[index])
         }
-        for (index in cardioList.indices) {
-            editor.putBoolean("cardio$index", cardioList[index])
+        for (index in uiState.cardioList.indices) {
+            editor.putBoolean("cardio$index", uiState.cardioList[index])
         }
-        for (index in pressList.indices) {
-            editor.putBoolean("press$index", pressList[index])
+        for (index in uiState.pressList.indices) {
+            editor.putBoolean("press$index", uiState.pressList[index])
         }
-        for (index in stretchingList.indices) {
-            editor.putBoolean("stretching$index", stretchingList[index])
-        }*/
+        for (index in uiState.stretchingList.indices) {
+            editor.putBoolean("stretching$index", uiState.stretchingList[index])
+        }
         editor.apply()
     }
 }
