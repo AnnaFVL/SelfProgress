@@ -36,23 +36,41 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Context
-        val context = applicationContext //val context = LocalContext.current
+        //val context = applicationContext //val context = LocalContext.current
+
         // ViewModel
         val model: MainActivityViewModel by viewModels()
-        model.readSharePreferences(context)
+        //model.readSharePreferences(context)
         // UIState
-        val uiState = model.uiState
+        //val uiState = model.uiState
 
 
         super.onCreate(savedInstanceState)
         setContent {
 
-            DefaultPreview()
+            Column () {
+                StateContainer(model)
+            }
 
         }
     }
 }
 
+@Composable
+fun StateContainer(viewModel: MainActivityViewModel) {
+
+    Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
+        DrawTitle()
+        DrawTable()
+        DrawResultLayout(
+            resultText = viewModel.resultText.value,
+            onButtonClick = { viewModel.сalculatedResult() })
+    }
+    /*DrawResultLayout(
+        resultText = viewModel.resultText.value,
+        onButtonClick = { viewModel.сalculatedResult() } )*/
+
+}
 
 @Composable
 fun DrawTitle() {
@@ -68,14 +86,17 @@ fun DrawTable() {
     val widthOfFirstColumn = 80.dp
     val tableHeight = 350.dp
 
-    Row(modifier = Modifier.background(Color.White)
+    Row(modifier = Modifier
+        .background(Color.White)
         .fillMaxWidth()
         .height(tableHeight)) {
-        Column(modifier = Modifier.background(LightPurple)
+        Column(modifier = Modifier
+            .background(LightPurple)
             .width(widthOfFirstColumn)) {
-            Box(modifier = Modifier.background(DarkOrange)
-                    .height(heightOfFirstRaw)
-                    .width(widthOfFirstColumn)
+            Box(modifier = Modifier
+                .background(DarkOrange)
+                .height(heightOfFirstRaw)
+                .width(widthOfFirstColumn)
             )
             Column(modifier = Modifier.fillMaxHeight(1f),
                 verticalArrangement = Arrangement.SpaceAround) {
@@ -89,12 +110,15 @@ fun DrawTable() {
         }
         for (activityItem in SportActivities.sportList) {
             Column(modifier = Modifier.weight(1f)) {
-                Box(modifier = Modifier.background(LightPurple)
+                Box(modifier = Modifier
+                    .background(LightPurple)
                     .height(heightOfFirstRaw)
                     .fillMaxWidth()) {
                         Text(text = activityItem,
                         style = Typography.subtitle2,
-                        modifier = Modifier.padding(top = 2.dp).fillMaxWidth(1f),
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .fillMaxWidth(1f),
                         textAlign = TextAlign.Center)
                 }
                 for (day in WeekDays.dayList) {
@@ -113,10 +137,10 @@ fun DrawTable() {
 
 
 @Composable
-fun DrawResultLayout() {
+fun DrawResultLayout(resultText: String, onButtonClick: () -> Unit) {
     Spacer(modifier = Modifier.height(10.dp))
     Button(
-        onClick = { /*caclResult(model, context)*/ },
+        onClick = { onButtonClick()}, //{ /*caclResult(model, context)*/ },
         colors = ButtonDefaults.buttonColors(backgroundColor = DarkPurple),
         modifier = Modifier.fillMaxWidth()) {
         Text(stringResource(id = R.string.result_calc_button), style = Typography.button)
@@ -127,7 +151,7 @@ fun DrawResultLayout() {
         style = Typography.caption)
 
     Spacer(modifier = Modifier.height(6.dp))
-    Text(text="Test text", //model.resultText, // model.getCalculatedResult()
+    Text(text=resultText, //model.resultText, // model.getCalculatedResult()
         style = Typography.subtitle1)
     Spacer(modifier = Modifier.height(10.dp))
 }
@@ -139,7 +163,9 @@ fun DefaultPreview() {
     Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
         DrawTable()
-        DrawResultLayout()
+        DrawResultLayout(
+            resultText = "Test text",
+            onButtonClick = {})
     }
 
 }

@@ -23,8 +23,8 @@ data class UiState(
 //////
 class MainActivityViewModel: ViewModel() {
 
-    var uiState by mutableStateOf(UiState())
-    var resultText = "Сейчас посчитаем..." //Resources.getSystem().getString(R.string.result_text_unknown)
+    //var uiState by mutableStateOf(UiState())
+    var resultText = mutableStateOf("Сейчас посчитаем...") //Resources.getSystem().getString(R.string.result_text_unknown)
 
     private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
 
@@ -32,14 +32,14 @@ class MainActivityViewModel: ViewModel() {
     fun сalculatedResult() {
         val random = java.util.Random().nextInt(5)
         when (random) {
-            0 -> resultText = "Надо больше стараться!"
-            1 -> resultText = "Неплохо! Может не все удалось, но ты старалась"
-            2 -> resultText = "Статус: герой ;)"
-            3 -> resultText = "Кто будет лениться, тот конфетки не ест ;)"
-            4 -> resultText = "Отлично! Все получилось!"
+            0 -> resultText.value = "Надо больше стараться!"
+            1 -> resultText.value = "Неплохо! Может не все удалось, но ты старалась"
+            2 -> resultText.value = "Статус: герой ;)"
+            3 -> resultText.value = "Кто будет лениться, тот конфетки не ест ;)"
+            4 -> resultText.value = "Отлично! Все получилось!"
         }
     }
-
+/*
     fun readSharePreferences(context: Context) {
         val sharedPreferences = context.getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
         for (index in uiState.basicList.indices) {
@@ -74,5 +74,5 @@ class MainActivityViewModel: ViewModel() {
             editor.putBoolean("stretching$index", uiState.stretchingList[index])
         }
         editor.apply()
-    }
+    }*/
 }
