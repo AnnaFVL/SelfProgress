@@ -61,14 +61,14 @@ fun StateContainer(viewModel: MainActivityViewModel) {
 
     Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
-        DrawTable()
+        DrawTable(
+            checkBoxValue = viewModel.boolCheck1.value,
+            onValueChange = { viewModel.updateBool1(it) }
+        )
         DrawResultLayout(
             resultText = viewModel.resultText.value,
             onButtonClick = { viewModel.сalculatedResult() })
     }
-    /*DrawResultLayout(
-        resultText = viewModel.resultText.value,
-        onButtonClick = { viewModel.сalculatedResult() } )*/
 
 }
 
@@ -81,7 +81,7 @@ fun DrawTitle() {
 }
 
 @Composable
-fun DrawTable() {
+fun DrawTable(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
     val heightOfFirstRaw = 20.dp
     val widthOfFirstColumn = 80.dp
     val tableHeight = 350.dp
@@ -122,9 +122,9 @@ fun DrawTable() {
                         textAlign = TextAlign.Center)
                 }
                 for (day in WeekDays.dayList) {
-                    Checkbox(checked = false,
+                    Checkbox(checked = checkBoxValue,
                         onCheckedChange = {
-                            //checkBoxState = it
+                            onValueChange(it)
                         },
                         colors  = CheckboxDefaults.colors(Orange, DarkOrange),
                         modifier = Modifier.fillMaxWidth(1f))
@@ -162,7 +162,9 @@ fun DefaultPreview() {
 
     Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
-        DrawTable()
+        DrawTable(
+            checkBoxValue = false,
+            onValueChange = {})
         DrawResultLayout(
             resultText = "Test text",
             onButtonClick = {})

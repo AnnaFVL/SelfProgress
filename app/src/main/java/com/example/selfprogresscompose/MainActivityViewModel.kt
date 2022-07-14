@@ -26,7 +26,9 @@ class MainActivityViewModel: ViewModel() {
     //var uiState by mutableStateOf(UiState())
     var resultText = mutableStateOf("Сейчас посчитаем...") //Resources.getSystem().getString(R.string.result_text_unknown)
 
-    private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
+    //private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
+    var boolCheck1 = mutableStateOf(true)
+    var boolCheck2: Boolean = true
 
 
     fun сalculatedResult() {
@@ -38,6 +40,11 @@ class MainActivityViewModel: ViewModel() {
             3 -> resultText.value = "Кто будет лениться, тот конфетки не ест ;)"
             4 -> resultText.value = "Отлично! Все получилось!"
         }
+        resultText.value = "${boolCheck1.value} / $boolCheck2"
+    }
+
+    fun updateBool1(newValue: Boolean) {
+        boolCheck1.value = newValue
     }
 /*
     fun readSharePreferences(context: Context) {
