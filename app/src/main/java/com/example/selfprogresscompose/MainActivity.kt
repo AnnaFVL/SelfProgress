@@ -82,6 +82,7 @@ fun DrawTitle() {
 
 @Composable
 fun DrawTable(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
+//fun DrawTable(checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit) {
     val heightOfFirstRaw = 20.dp
     val widthOfFirstColumn = 80.dp
     val tableHeight = 350.dp
@@ -90,51 +91,68 @@ fun DrawTable(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
         .background(Color.White)
         .fillMaxWidth()
         .height(tableHeight)) {
-        Column(modifier = Modifier
-            .background(LightPurple)
-            .width(widthOfFirstColumn)) {
-            Box(modifier = Modifier
-                .background(DarkOrange)
-                .height(heightOfFirstRaw)
-                .width(widthOfFirstColumn)
-            )
-            Column(modifier = Modifier.fillMaxHeight(1f),
-                verticalArrangement = Arrangement.SpaceAround) {
-                for (day in WeekDays.dayList) {
-                    Text(
-                        text = day, style = Typography.subtitle2,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-            }
-        }
+
+        DrawWeekDayColumn(widthOfFirstColumn, heightOfFirstRaw)
+
         for (activityItem in SportActivities.sportList) {
             Column(modifier = Modifier.weight(1f)) {
-                Box(modifier = Modifier
-                    .background(LightPurple)
-                    .height(heightOfFirstRaw)
-                    .fillMaxWidth()) {
-                        Text(text = activityItem,
-                        style = Typography.subtitle2,
-                        modifier = Modifier
-                            .padding(top = 2.dp)
-                            .fillMaxWidth(1f),
-                        textAlign = TextAlign.Center)
-                }
-                for (day in WeekDays.dayList) {
-                    Checkbox(checked = checkBoxValue,
-                        onCheckedChange = {
-                            onValueChange(it)
-                        },
-                        colors  = CheckboxDefaults.colors(Orange, DarkOrange),
-                        modifier = Modifier.fillMaxWidth(1f))
-
-                }
+                DrawActivityColumn(activityItem, heightOfFirstRaw, checkBoxValue, onValueChange)
             }
         }
     }
 }
 
+@Composable
+fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp) {
+    Column(modifier = Modifier
+        .background(LightPurple)
+        .width(widthOfFirstColumn)) {
+        Box(modifier = Modifier
+            .background(DarkOrange)
+            .height(heightOfFirstRaw)
+            .width(widthOfFirstColumn)
+        )
+        Column(modifier = Modifier.fillMaxHeight(1f),
+            verticalArrangement = Arrangement.SpaceAround) {
+            for (day in WeekDays.dayList) {
+                Text(
+                    text = day, style = Typography.subtitle2,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
+// fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit)
+    Box(modifier = Modifier
+        .background(LightPurple)
+        .height(heightOfFirstRaw)
+        .fillMaxWidth()) {
+        Text(text = activity,
+            style = Typography.subtitle2,
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .fillMaxWidth(1f),
+            textAlign = TextAlign.Center)
+    }
+    for (dayIndex in WeekDays.dayList.indices) {
+        //var currentCheckBox : Boolean = checkBoxList[dayIndex].value
+        DrawCheckBox(checkBoxValue = checkBoxValue, onValueChange = onValueChange)
+    }
+}
+
+@Composable
+fun DrawCheckBox(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
+    Checkbox(checked = checkBoxValue,
+        onCheckedChange = {
+            onValueChange(it)
+        },
+        colors  = CheckboxDefaults.colors(Orange, DarkOrange),
+        modifier = Modifier.fillMaxWidth(1f))
+}
 
 @Composable
 fun DrawResultLayout(resultText: String, onButtonClick: () -> Unit) {

@@ -7,16 +7,17 @@ import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import java.text.FieldPosition
 
 //////
 // Выполненные спотривные активности по дням недели
 //////
-data class UiState(
+/*data class UiState(
     val basicList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
     val cardioList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
     val pressList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false),
     val stretchingList : MutableList<Boolean> = mutableListOf (false, false, false, false, false, false, false)
-)
+)*/
 
 //////
 // Хранит текущее состояние, считает результат, сохраняет и считывает состояние в sharedPreferences
@@ -28,7 +29,10 @@ class MainActivityViewModel: ViewModel() {
 
     //private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
     var boolCheck1 = mutableStateOf(true)
-    var boolCheck2: Boolean = true
+
+    var boolList = mutableListOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+        mutableStateOf(false), mutableStateOf(false), mutableStateOf(false))
+    var currentCheckBoxIndex = mutableStateOf(0)
 
 
     fun сalculatedResult() {
@@ -40,11 +44,17 @@ class MainActivityViewModel: ViewModel() {
             3 -> resultText.value = "Кто будет лениться, тот конфетки не ест ;)"
             4 -> resultText.value = "Отлично! Все получилось!"
         }
-        resultText.value = "${boolCheck1.value} / $boolCheck2"
+        resultText.value += "\n ${boolCheck1.value} \n"
+        resultText.value += "${boolList[0].value} / ${boolList[1].value} / ${boolList[2].value} / ${boolList[3].value} /" +
+                "${boolList[4].value} / ${boolList[5].value} / ${boolList[6].value}"
     }
 
     fun updateBool1(newValue: Boolean) {
         boolCheck1.value = newValue
+    }
+
+    fun updateBoolList(newValue: Boolean) {
+        boolList[currentCheckBoxIndex.value].value = newValue
     }
 /*
     fun readSharePreferences(context: Context) {
