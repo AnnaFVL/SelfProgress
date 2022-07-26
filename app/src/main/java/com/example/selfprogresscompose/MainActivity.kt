@@ -34,150 +34,24 @@ import com.example.selfprogresscompose.ui.theme.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        // Context
-        //val context = applicationContext //val context = LocalContext.current
-
-        // ViewModel
-        val model: MainActivityViewModel by viewModels()
-        //model.readSharePreferences(context)
-        // UIState
-        //val uiState = model.uiState
-
-
         super.onCreate(savedInstanceState)
         setContent {
-
-            Column () {
-                StateContainer(model)
-            }
-
-        }
-    }
-}
-
-@Composable
-fun StateContainer(viewModel: MainActivityViewModel) {
-
-    Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
-        DrawTitle()
-        DrawTable(
-            checkBoxValue = viewModel.boolCheck1.value,
-            onValueChange = { viewModel.updateBool1(it) }
-        )
-        DrawResultLayout(
-            resultText = viewModel.resultText.value,
-            onButtonClick = { viewModel.сalculatedResult() })
-    }
-
-}
-
-@Composable
-fun DrawTitle() {
-    Spacer(modifier = Modifier.height(10.dp))
-    Text(text= stringResource(id = R.string.header_text),
-        style = Typography.subtitle1)
-    Spacer(modifier = Modifier.height(10.dp))
-}
-
-@Composable
-fun DrawTable(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
-//fun DrawTable(checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit) {
-    val heightOfFirstRaw = 20.dp
-    val widthOfFirstColumn = 80.dp
-    val tableHeight = 350.dp
-
-    Row(modifier = Modifier
-        .background(Color.White)
-        .fillMaxWidth()
-        .height(tableHeight)) {
-
-        DrawWeekDayColumn(widthOfFirstColumn, heightOfFirstRaw)
-
-        for (activityItem in SportActivities.sportList) {
-            Column(modifier = Modifier.weight(1f)) {
-                DrawActivityColumn(activityItem, heightOfFirstRaw, checkBoxValue, onValueChange)
+            SelfProgressComposeTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    SelfProgressScreen()
+                }
             }
         }
     }
-}
-
-@Composable
-fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp) {
-    Column(modifier = Modifier
-        .background(LightPurple)
-        .width(widthOfFirstColumn)) {
-        Box(modifier = Modifier
-            .background(DarkOrange)
-            .height(heightOfFirstRaw)
-            .width(widthOfFirstColumn)
-        )
-        Column(modifier = Modifier.fillMaxHeight(1f),
-            verticalArrangement = Arrangement.SpaceAround) {
-            for (day in WeekDays.dayList) {
-                Text(
-                    text = day, style = Typography.subtitle2,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
-// fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit)
-    Box(modifier = Modifier
-        .background(LightPurple)
-        .height(heightOfFirstRaw)
-        .fillMaxWidth()) {
-        Text(text = activity,
-            style = Typography.subtitle2,
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .fillMaxWidth(1f),
-            textAlign = TextAlign.Center)
-    }
-    for (dayIndex in WeekDays.dayList.indices) {
-        //var currentCheckBox : Boolean = checkBoxList[dayIndex].value
-        DrawCheckBox(checkBoxValue = checkBoxValue, onValueChange = onValueChange)
-    }
-}
-
-@Composable
-fun DrawCheckBox(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
-    Checkbox(checked = checkBoxValue,
-        onCheckedChange = {
-            onValueChange(it)
-        },
-        colors  = CheckboxDefaults.colors(Orange, DarkOrange),
-        modifier = Modifier.fillMaxWidth(1f))
-}
-
-@Composable
-fun DrawResultLayout(resultText: String, onButtonClick: () -> Unit) {
-    Spacer(modifier = Modifier.height(10.dp))
-    Button(
-        onClick = { onButtonClick()}, //{ /*caclResult(model, context)*/ },
-        colors = ButtonDefaults.buttonColors(backgroundColor = DarkPurple),
-        modifier = Modifier.fillMaxWidth()) {
-        Text(stringResource(id = R.string.result_calc_button), style = Typography.button)
-    }
-
-    Spacer(modifier = Modifier.height(6.dp))
-    Text(text=stringResource(id = R.string.result_text),
-        style = Typography.caption)
-
-    Spacer(modifier = Modifier.height(6.dp))
-    Text(text=resultText, //model.resultText, // model.getCalculatedResult()
-        style = Typography.subtitle1)
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-
+/*
     Column(Modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
         DrawTable(
@@ -187,13 +61,5 @@ fun DefaultPreview() {
             resultText = "Test text",
             onButtonClick = {})
     }
-
-}
-
-object WeekDays {
-    val dayList = listOf("понедельник", "вторник", "среда", "четверг", "пятница", "суббота", "воскресенье")
-}
-
-object SportActivities {
-    val sportList = listOf("зарядка", "кардио", "пресс", "растяжка")
+*/
 }
