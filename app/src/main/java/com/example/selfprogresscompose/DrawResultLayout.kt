@@ -18,7 +18,7 @@ import com.example.selfprogresscompose.ui.theme.Typography
 fun DrawResultLayout(resultText: String, onButtonClick: () -> Unit) {
     Spacer(modifier = Modifier.height(10.dp))
     Button(
-        onClick = { onButtonClick()}, //{ /*caclResult(model, context)*/ },
+        onClick = { onButtonClick()},
         colors = ButtonDefaults.buttonColors(backgroundColor = DarkPurple),
         modifier = Modifier.fillMaxWidth()) {
         Text(stringResource(id = R.string.result_calc_button), style = Typography.button)
@@ -29,7 +29,7 @@ fun DrawResultLayout(resultText: String, onButtonClick: () -> Unit) {
         style = Typography.caption)
 
     Spacer(modifier = Modifier.height(6.dp))
-    Text(text=resultText, //model.resultText, // model.getCalculatedResult()
+    Text(text=resultText,
         style = Typography.subtitle1)
     Spacer(modifier = Modifier.height(10.dp))
 }

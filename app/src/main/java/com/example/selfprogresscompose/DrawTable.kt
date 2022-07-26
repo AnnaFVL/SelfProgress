@@ -26,9 +26,8 @@ fun DrawTable(basicList: List<SportTask>,
               onCheckedPressTask: (SportTask, Boolean) -> Unit,
               stretchingList: List<SportTask>,
               onCheckedStretchingTask: (SportTask, Boolean) -> Unit,
-              modifier: Modifier = Modifier) {
-//fun DrawTable(checkBoxValue: Boolean, onValueChange: (Boolean) -> Unit) {
-//fun DrawTable(checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit) {
+              modifier: Modifier = Modifier)
+{
     val heightOfFirstRaw = 20.dp
     val widthOfFirstColumn = 80.dp
     val tableHeight = 350.dp
@@ -44,12 +43,6 @@ fun DrawTable(basicList: List<SportTask>,
         DrawActivityColumn("пресс", heightOfFirstRaw, pressList, onCheckedPressTask, modifier)
         DrawActivityColumn("растяжка", heightOfFirstRaw, stretchingList, onCheckedStretchingTask, modifier)
 
-        /*
-        for (activityItem in SportActivities.sportList) {
-            Column(modifier = Modifier.weight(1f)) {
-                DrawActivityColumn(activityItem, heightOfFirstRaw, checkBoxValue, onValueChange)
-            }
-        }*/
     }
 }
 
@@ -76,7 +69,6 @@ fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp, modifier: Mo
 
 @Composable
 fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportTask>, onCheckedTask: (SportTask, Boolean) -> Unit, modifier: Modifier = Modifier) {
-// fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, checkBoxList: List<MutableState<Boolean>>, onValueChange: (Boolean) -> Unit)
     Column(modifier.width(60.dp)) { //1f
         Box(
             modifier = Modifier
@@ -94,7 +86,6 @@ fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportT
             )
         }
         for (index in list.indices) {
-            //var currentCheckBox : Boolean = checkBoxList[dayIndex].value
             Checkbox(checked = list.get(index).checked,
                 onCheckedChange = { checked -> onCheckedTask(list.get(index), checked)},
                 colors  = CheckboxDefaults.colors(Orange, DarkOrange),

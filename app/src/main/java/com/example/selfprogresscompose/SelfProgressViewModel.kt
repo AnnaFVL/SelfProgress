@@ -1,18 +1,15 @@
 package com.example.selfprogresscompose
 
-import android.content.Context
-import android.content.res.Resources
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
-import java.text.FieldPosition
 
 class SelfProgressViewModel: ViewModel() {
 
     var resultText = mutableStateOf("Сейчас посчитаем...")
+    var resultPercentage : Double = 0.0
 
     private val _basicTasks = getBasicList().toMutableStateList()
     private val _cardioTasks = getCardioList().toMutableStateList()
@@ -41,25 +38,47 @@ class SelfProgressViewModel: ViewModel() {
         stretchingTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
     }
 
-    //private val sharedPreferencesFileName = "selfProgressAppSharedPreferences"
-/*    var boolCheck1 = mutableStateOf(true)
-
-    var boolList = mutableListOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
-        mutableStateOf(false), mutableStateOf(false), mutableStateOf(false))
-    var currentCheckBoxIndex = mutableStateOf(0)*/
-
 
     fun сalculatedResult() {
+
+        resultPercentage = 0.0
+
         val random = java.util.Random().nextInt(5)
-        when (random) {
-            0 -> resultText.value = "Надо больше стараться!"
-            1 -> resultText.value = "Неплохо! Может не все удалось, но ты старалась"
-            2 -> resultText.value = "Статус: герой ;)"
-            3 -> resultText.value = "Кто будет лениться, тот конфетки не ест ;)"
-            4 -> resultText.value = "Отлично! Все получилось!"
+
+        for (i in basicTasks.indices) {
+            if (basicTasks.get(i).checked) resultPercentage += basicTasks.get(i).weight
+            if (cardioTasks.get(i).checked) resultPercentage += cardioTasks.get(i).weight
+            if (pressTasks.get(i).checked) resultPercentage += pressTasks.get(i).weight
+            if (stretchingTasks.get(i).checked) resultPercentage += stretchingTasks.get(i).weight
         }
-        /*
-        resultText.value += "\n ${boolCheck1.value} \n" */
+        if (resultPercentage < 70) {
+            when (random) {
+                0 -> resultText.value = "Надо больше стараться!"
+                1 -> resultText.value = "Кто будет лениться, тот конфетки не ест ;)"
+                2 -> resultText.value = "Трудись! На следующей неделе будет труднее..."
+                3 -> resultText.value = "Помним про цель и двигаемся к ней!"
+                4 -> resultText.value = "Маловато будет ;)"
+            }
+        } else if (resultPercentage < 100) {
+            when (random) {
+                0 -> resultText.value = "Неплохо! Может не все удалось, но ты старалась"
+                1 -> resultText.value = "Еще немного поднажмем!.."
+                2 -> resultText.value = "Результат есть, и это прекрасно! ;)"
+                3 -> resultText.value = "Перфекционизм, конечно, зло... Порадуемся тому, что есть ;)"
+                4 -> resultText.value = "Пироженки и конфетки еще нужно заработать ;)"
+            }
+        } else {
+            when (random) {
+                0 -> resultText.value = "Статус: герой ;)"
+                1 -> resultText.value = "Отлично! Все получилось!"
+                2 -> resultText.value = "Горжусь тобой! и собой ;)"
+                3 -> resultText.value = "Ого-го! Супер!!!"
+                4 -> resultText.value = "Цель достингута! Бурные аплодисменты ;)"
+            }
+        }
+
+        resultText.value += "\n" + resultPercentage.toString()
+
         resultText.value += "\n ${basicTasks.get(0).checked} / ${basicTasks.get(1).checked} / ${basicTasks.get(2).checked} / ${basicTasks.get(3).checked} /" +
                 "${basicTasks.get(4).checked} / ${basicTasks.get(5).checked} / ${basicTasks.get(6).checked}"
         resultText.value += "\n ${cardioTasks.get(0).checked} / ${cardioTasks.get(1).checked} / ${cardioTasks.get(2).checked} / ${cardioTasks.get(3).checked} /" +
@@ -69,17 +88,6 @@ class SelfProgressViewModel: ViewModel() {
         resultText.value += "\n ${stretchingTasks.get(0).checked} / ${stretchingTasks.get(1).checked} / ${stretchingTasks.get(2).checked} / ${stretchingTasks.get(3).checked} /" +
                 "${stretchingTasks.get(4).checked} / ${stretchingTasks.get(5).checked} / ${stretchingTasks.get(6).checked}"
     }
-
-    /*
-    fun updateBool1(newValue: Boolean) {
-        boolCheck1.value = newValue
-    }
-
-    fun updateBoolList(newValue: Boolean) {
-        boolList[currentCheckBoxIndex.value].value = newValue
-    }*/
-
-
 
 
 /*
@@ -127,6 +135,13 @@ object SportList {
 
 class SportTask(val id: Int, val label: String, initialChecked: Boolean = false) {
     var checked by mutableStateOf(initialChecked)
+    val weight: Double = when (label) {
+        "basic" -> 6.25
+        "cardio" -> 6.25
+        "press" -> 8.4
+        "stretching" -> 8.4
+        else -> 1.0
+    }
 }
 
 private fun getBasicList() = List(7) { i -> SportTask(i, "basic") }

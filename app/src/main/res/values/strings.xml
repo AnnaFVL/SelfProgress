@@ -5,23 +5,4 @@
     <string name="result_calc_button">Посчитать прогресс</string>
     <string name="result_text">Результат</string>
 
-    <string name="result_text_unknown">Сейчас посчитаем...</string>
-    <string name="result_text_good1">Результат</string>
-    <string name="result_text_good2">Результат</string>
-    <string name="result_text_good3">Результат</string>
-    <string name="result_text_middle1">Результат</string>
-    <string name="result_text_middle2">Результат</string>
-    <string name="result_text_middle3">Результат</string>
-    <string name="result_text_middle4">Результат</string>
-    <string name="result_text_middle5">Результат</string>
-    <string name="result_text_middle6">Результат</string>
-    <string name="result_text_bad1">Результат</string>
-    <string name="result_text_bad2">Результат</string>
-    <string name="result_text_bad3">Результат</string>
-    <string name="result_text_bad4">Результат</string>
-    <string name="result_text_bad5">Результат</string>
-    <string name="result_text_bad6">Результат</string>
-    <string name="result_text_bad7">Результат</string>
-    <string name="result_text_bad8">Результат</string>
-    <string name="result_text_bad9">Результат</string>
 </resources>
