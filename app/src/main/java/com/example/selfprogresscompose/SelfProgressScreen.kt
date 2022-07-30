@@ -1,5 +1,7 @@
 package com.example.selfprogresscompose
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,7 +10,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun SelfProgressScreen(modifier: Modifier = Modifier, selfProgressVM: SelfProgressViewModel = viewModel()) {
+fun SelfProgressScreen(sharedPreferences: SharedPreferences, modifier: Modifier = Modifier) {
+
+    val selfProgressVM: SelfProgressViewModel = viewModel()
+    selfProgressVM.sharedPreferences = sharedPreferences
+    selfProgressVM.readSharePreferences()
 
     Column(modifier = modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
@@ -24,7 +30,9 @@ fun SelfProgressScreen(modifier: Modifier = Modifier, selfProgressVM: SelfProgre
         )
         DrawResultLayout(
             resultText = selfProgressVM.resultText.value,
-            onButtonClick = { selfProgressVM.сalculatedResult() })
+            resultColor = selfProgressVM.resultColor.value,
+            onButtonClick = { selfProgressVM.сalculatedResult() },
+            onNewWeekClick = { selfProgressVM.clearCheckBoxes()})
     }
 }
 

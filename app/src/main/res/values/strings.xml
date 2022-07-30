@@ -3,6 +3,15 @@
 
     <string name="header_text">Мои спортивные успехи</string>
     <string name="result_calc_button">Посчитать прогресс</string>
-    <string name="result_text">Результат</string>
+    <string name="result_text">Результат:</string>
+    <string name="goal_text">Цель на неделю:</string>
+    <string name="goal_description1">Зарядка и кардио по 4 раза, пресс и растяжка по 3 раза</string>
+    <string name="goal_description2">Выполнение цели на 100% и более - </string>
+    <string name="goal_description3">На 70-99% - </string>
+    <string name="goal_description4">. Меньше 70% - </string>
+    <string name="goal_good">отлично</string>
+    <string name="goal_normal">хорошо</string>
+    <string name="goal_bad">плохо</string>
+    <string name="new_week">Новая неделя</string>
 
 </resources>

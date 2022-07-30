@@ -12,8 +12,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.selfprogresscompose.ui.theme.DarkOrange
-import com.example.selfprogresscompose.ui.theme.LightPurple
-import com.example.selfprogresscompose.ui.theme.Orange
+import com.example.selfprogresscompose.ui.theme.LightAquamarine
+import com.example.selfprogresscompose.ui.theme.LightGreen
 import com.example.selfprogresscompose.ui.theme.Typography
 
 
@@ -48,10 +48,10 @@ fun DrawTable(basicList: List<SportTask>,
 
 @Composable
 fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp, modifier: Modifier = Modifier) {
-    Column(modifier.background(LightPurple)
+    Column(modifier.background(LightAquamarine)
         .width(widthOfFirstColumn)) {
         Box(modifier = Modifier
-            .background(DarkOrange)
+            .background(LightGreen)
             .height(heightOfFirstRaw)
             .width(widthOfFirstColumn)
         )
@@ -72,7 +72,7 @@ fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportT
     Column(modifier.width(60.dp)) { //1f
         Box(
             modifier = Modifier
-                .background(LightPurple)
+                .background(LightAquamarine)
                 .height(heightOfFirstRaw)
                 .fillMaxWidth()
         ) {
@@ -88,7 +88,7 @@ fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportT
         for (index in list.indices) {
             Checkbox(checked = list.get(index).checked,
                 onCheckedChange = { checked -> onCheckedTask(list.get(index), checked)},
-                colors  = CheckboxDefaults.colors(Orange, DarkOrange),
+                colors  = CheckboxDefaults.colors(LightGreen, DarkOrange),
                 modifier = Modifier.fillMaxWidth(1f))
         }
     }

@@ -1,15 +1,23 @@
 package com.example.selfprogresscompose
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import com.example.selfprogresscompose.ui.theme.DarkGreen
+import com.example.selfprogresscompose.ui.theme.Green
+import com.example.selfprogresscompose.ui.theme.Red
+import com.example.selfprogresscompose.ui.theme.Orange
 
 class SelfProgressViewModel: ViewModel() {
 
+    lateinit var sharedPreferences: SharedPreferences
+
     var resultText = mutableStateOf("Сейчас посчитаем...")
     var resultPercentage : Double = 0.0
+    var resultColor = mutableStateOf(DarkGreen)
 
     private val _basicTasks = getBasicList().toMutableStateList()
     private val _cardioTasks = getCardioList().toMutableStateList()
@@ -38,19 +46,21 @@ class SelfProgressViewModel: ViewModel() {
         stretchingTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
     }
 
+    fun clearCheckBoxes() {
+        for (index in _basicTasks.indices) {
+            _basicTasks[index].checked = false
+            _cardioTasks[index].checked = false
+            _pressTasks[index].checked = false
+            _stretchingTasks[index].checked = false
+        }
+    }
 
     fun сalculatedResult() {
 
-        resultPercentage = 0.0
-
+        calculateResultPercentage()
+        resultColor.value = DarkGreen
         val random = java.util.Random().nextInt(5)
 
-        for (i in basicTasks.indices) {
-            if (basicTasks.get(i).checked) resultPercentage += basicTasks.get(i).weight
-            if (cardioTasks.get(i).checked) resultPercentage += cardioTasks.get(i).weight
-            if (pressTasks.get(i).checked) resultPercentage += pressTasks.get(i).weight
-            if (stretchingTasks.get(i).checked) resultPercentage += stretchingTasks.get(i).weight
-        }
         if (resultPercentage < 70) {
             when (random) {
                 0 -> resultText.value = "Надо больше стараться!"
@@ -59,6 +69,7 @@ class SelfProgressViewModel: ViewModel() {
                 3 -> resultText.value = "Помним про цель и двигаемся к ней!"
                 4 -> resultText.value = "Маловато будет ;)"
             }
+            resultColor.value = Red
         } else if (resultPercentage < 100) {
             when (random) {
                 0 -> resultText.value = "Неплохо! Может не все удалось, но ты старалась"
@@ -67,6 +78,7 @@ class SelfProgressViewModel: ViewModel() {
                 3 -> resultText.value = "Перфекционизм, конечно, зло... Порадуемся тому, что есть ;)"
                 4 -> resultText.value = "Пироженки и конфетки еще нужно заработать ;)"
             }
+            resultColor.value = Orange
         } else {
             when (random) {
                 0 -> resultText.value = "Статус: герой ;)"
@@ -75,10 +87,13 @@ class SelfProgressViewModel: ViewModel() {
                 3 -> resultText.value = "Ого-го! Супер!!!"
                 4 -> resultText.value = "Цель достингута! Бурные аплодисменты ;)"
             }
+            resultColor.value = Green
         }
 
-        resultText.value += "\n" + resultPercentage.toString()
+        resultText.value += "\n" + resultPercentage.toString() + "% от цели"
 
+        writeSharePreferences()
+/*
         resultText.value += "\n ${basicTasks.get(0).checked} / ${basicTasks.get(1).checked} / ${basicTasks.get(2).checked} / ${basicTasks.get(3).checked} /" +
                 "${basicTasks.get(4).checked} / ${basicTasks.get(5).checked} / ${basicTasks.get(6).checked}"
         resultText.value += "\n ${cardioTasks.get(0).checked} / ${cardioTasks.get(1).checked} / ${cardioTasks.get(2).checked} / ${cardioTasks.get(3).checked} /" +
@@ -86,46 +101,81 @@ class SelfProgressViewModel: ViewModel() {
         resultText.value += "\n ${pressTasks.get(0).checked} / ${pressTasks.get(1).checked} / ${pressTasks.get(2).checked} / ${pressTasks.get(3).checked} /" +
                 "${pressTasks.get(4).checked} / ${pressTasks.get(5).checked} / ${pressTasks.get(6).checked}"
         resultText.value += "\n ${stretchingTasks.get(0).checked} / ${stretchingTasks.get(1).checked} / ${stretchingTasks.get(2).checked} / ${stretchingTasks.get(3).checked} /" +
-                "${stretchingTasks.get(4).checked} / ${stretchingTasks.get(5).checked} / ${stretchingTasks.get(6).checked}"
+                "${stretchingTasks.get(4).checked} / ${stretchingTasks.get(5).checked} / ${stretchingTasks.get(6).checked}"*/
+    }
+
+    fun calculateResultPercentage() {
+        resultPercentage = 0.0
+        var tasksAmount: Int = 0
+
+        for (i in basicTasks.indices) {
+            if (basicTasks.get(i).checked && tasksAmount < 4) {
+                resultPercentage += basicTasks.get(i).weight
+                tasksAmount++
+            }
+        }
+        tasksAmount = 0
+        for (i in cardioTasks.indices) {
+            if (cardioTasks.get(i).checked && tasksAmount < 4) {
+                resultPercentage += cardioTasks.get(i).weight
+                tasksAmount++
+            }
+        }
+        tasksAmount = 0
+        for (i in pressTasks.indices) {
+            if (pressTasks.get(i).checked && tasksAmount < 3) {
+                resultPercentage += pressTasks.get(i).weight
+                tasksAmount++
+            }
+        }
+        tasksAmount = 0
+        for (i in stretchingTasks.indices) {
+            if (stretchingTasks.get(i).checked && tasksAmount < 3) {
+                resultPercentage += stretchingTasks.get(i).weight
+                tasksAmount++
+            }
+        }
+        resultPercentage = Math.round(resultPercentage*100.0)/100.0
+    //resultPercentage = String.format("%.2f", resultPercentage).toDouble()
     }
 
 
-/*
-    fun readSharePreferences(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
-        for (index in uiState.basicList.indices) {
-            uiState.basicList[index] = sharedPreferences.getBoolean("basic$index", false)
+    fun readSharePreferences() {
+
+        //val sharedPreferences = Application.//context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        for (index in _basicTasks.indices) {
+            _basicTasks[index].checked = sharedPreferences.getBoolean("basic$index", false)
         }
-        for (index in uiState.cardioList.indices) {
-            uiState.cardioList[index] = sharedPreferences.getBoolean("cardio$index", false)
+        for (index in _cardioTasks.indices) {
+            _cardioTasks[index].checked = sharedPreferences.getBoolean("cardio$index", false)
         }
-        for (index in uiState.pressList.indices) {
-            uiState.pressList[index] = sharedPreferences.getBoolean("press$index", false)
+        for (index in _pressTasks.indices) {
+            _pressTasks[index].checked = sharedPreferences.getBoolean("press$index", false)
         }
-        for (index in uiState.stretchingList.indices) {
-            uiState.stretchingList[index] = sharedPreferences.getBoolean("stretching$index", false)
+        for (index in _stretchingTasks.indices) {
+            _stretchingTasks[index].checked = sharedPreferences.getBoolean("stretching$index", false)
         }
 
     }
 
-    fun writeSharePreferences(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
+    fun writeSharePreferences() {
+        //val sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        for (index in uiState.basicList.indices) {
-            editor.putBoolean("basic$index", uiState.basicList[index])
+        for (index in _basicTasks.indices) {
+            editor.putBoolean("basic$index", _basicTasks[index].checked)
         }
-        for (index in uiState.cardioList.indices) {
-            editor.putBoolean("cardio$index", uiState.cardioList[index])
+        for (index in _cardioTasks.indices) {
+            editor.putBoolean("cardio$index", _cardioTasks[index].checked)
         }
-        for (index in uiState.pressList.indices) {
-            editor.putBoolean("press$index", uiState.pressList[index])
+        for (index in _pressTasks.indices) {
+            editor.putBoolean("press$index", _pressTasks[index].checked)
         }
-        for (index in uiState.stretchingList.indices) {
-            editor.putBoolean("stretching$index", uiState.stretchingList[index])
+        for (index in _stretchingTasks.indices) {
+            editor.putBoolean("stretching$index", _stretchingTasks[index].checked)
         }
         editor.apply()
-    }*/
+    }
 }
 
 /*
