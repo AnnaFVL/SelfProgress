@@ -16,7 +16,7 @@ class SelfProgressViewModel: ViewModel() {
     lateinit var sharedPreferences: SharedPreferences
 
     var resultText = mutableStateOf("Сейчас посчитаем...")
-    var resultPercentage : Double = 0.0
+    var resultPercentage : Int = 0
     var resultColor = mutableStateOf(DarkGreen)
 
     private val _basicTasks = getBasicList().toMutableStateList()
@@ -105,37 +105,38 @@ class SelfProgressViewModel: ViewModel() {
     }
 
     fun calculateResultPercentage() {
-        resultPercentage = 0.0
+        var resultPercentageDouble = 0.0
         var tasksAmount: Int = 0
 
         for (i in basicTasks.indices) {
             if (basicTasks.get(i).checked && tasksAmount < 4) {
-                resultPercentage += basicTasks.get(i).weight
+                resultPercentageDouble += basicTasks.get(i).weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in cardioTasks.indices) {
             if (cardioTasks.get(i).checked && tasksAmount < 4) {
-                resultPercentage += cardioTasks.get(i).weight
+                resultPercentageDouble += cardioTasks.get(i).weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in pressTasks.indices) {
             if (pressTasks.get(i).checked && tasksAmount < 3) {
-                resultPercentage += pressTasks.get(i).weight
+                resultPercentageDouble += pressTasks.get(i).weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in stretchingTasks.indices) {
             if (stretchingTasks.get(i).checked && tasksAmount < 3) {
-                resultPercentage += stretchingTasks.get(i).weight
+                resultPercentageDouble += stretchingTasks.get(i).weight
                 tasksAmount++
             }
         }
-        resultPercentage = Math.round(resultPercentage*100.0)/100.0
+        resultPercentage = resultPercentageDouble.toInt()
+    //resultPercentage = Math.round(resultPercentage*100.0)/100.0
     //resultPercentage = String.format("%.2f", resultPercentage).toDouble()
     }
 
