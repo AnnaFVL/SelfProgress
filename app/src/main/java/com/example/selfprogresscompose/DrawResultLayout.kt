@@ -17,7 +17,7 @@ import com.example.selfprogresscompose.ui.theme.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import com.example.selfprogresscompose.ui.theme.Green
+import com.example.selfprogresscompose.ui.theme.DarkPurple
 
 
 @Composable
@@ -44,7 +44,7 @@ fun DrawResultLayout(resultText: String, resultColor: Color, onButtonClick: () -
         modifier = Modifier.fillMaxWidth(1f)) {
         Text(
             text = stringResource(id = R.string.new_week),
-            style = Typography.caption, color = Green,
+            style = Typography.caption, color = DarkPurple,
             //modifier = Modifier.fillMaxWidth(1f),
             //textAlign = TextAlign.End,
             textDecoration = TextDecoration.Underline

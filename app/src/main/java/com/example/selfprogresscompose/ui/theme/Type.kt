@@ -18,13 +18,13 @@ val Typography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp,
-        color = DarkGreen
+        color = DarkAquamarine
     ),
     caption = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 10.sp,
-        color = DarkGreen
+        color = DarkAquamarine
     ),
     button = TextStyle(
         fontFamily = FontFamily.Default,
@@ -42,6 +42,6 @@ val Typography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        color = DarkGreen
+        color = DarkAquamarine
     )
 )

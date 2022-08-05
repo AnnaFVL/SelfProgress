@@ -28,22 +28,22 @@ fun DrawTitle() {
     Spacer(modifier = Modifier.height(6.dp))
     Column() {
         Text(text= stringResource(id = R.string.goal_description1),
-            style = Typography.body1, color = DarkOrange)
+            style = Typography.body1, color = DarkPurple)
         Row() {
             Text(text= stringResource(id = R.string.goal_description2),
                 style = Typography.body1)
             Text(text= stringResource(id = R.string.goal_good),
-                style = Typography.body1, color = Green, modifier = Modifier.padding(start = 4.dp))
+                style = Typography.body1, modifier = Modifier.padding(start = 4.dp))
         }
         Row() {
             Text(text= stringResource(id = R.string.goal_description3),
                 style = Typography.body1)
             Text(text= stringResource(id = R.string.goal_normal),
-                style = Typography.body1, color = Orange, modifier = Modifier.padding(start = 4.dp))
+                style = Typography.body1, modifier = Modifier.padding(start = 4.dp))
             Text(text= stringResource(id = R.string.goal_description4),
                 style = Typography.body1)
             Text(text= stringResource(id = R.string.goal_bad),
-                style = Typography.body1, color = Red, modifier = Modifier.padding(start = 4.dp))
+                style = Typography.body1, modifier = Modifier.padding(start = 4.dp))
         }
     }
     Spacer(modifier = Modifier.height(10.dp))

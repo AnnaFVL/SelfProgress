@@ -6,10 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
-import com.example.selfprogresscompose.ui.theme.DarkGreen
-import com.example.selfprogresscompose.ui.theme.Green
-import com.example.selfprogresscompose.ui.theme.Red
-import com.example.selfprogresscompose.ui.theme.Orange
+import com.example.selfprogresscompose.ui.theme.*
 
 class SelfProgressViewModel: ViewModel() {
 
@@ -17,7 +14,7 @@ class SelfProgressViewModel: ViewModel() {
 
     var resultText = mutableStateOf("Сейчас посчитаем...")
     var resultPercentage : Int = 0
-    var resultColor = mutableStateOf(DarkGreen)
+    var resultColor = mutableStateOf(DarkAquamarine)
 
     private val _basicTasks = getBasicList().toMutableStateList()
     private val _cardioTasks = getCardioList().toMutableStateList()
@@ -58,7 +55,7 @@ class SelfProgressViewModel: ViewModel() {
     fun сalculatedResult() {
 
         calculateResultPercentage()
-        resultColor.value = DarkGreen
+        resultColor.value = DarkAquamarine
         val random = java.util.Random().nextInt(5)
 
         if (resultPercentage < 70) {
