@@ -13,7 +13,7 @@ class SelfProgressViewModel: ViewModel() {
     lateinit var sharedPreferences: SharedPreferences
 
     var resultText = mutableStateOf("Сейчас посчитаем...")
-    var resultPercentage : Int = 0
+    private var resultPercentage : Int = 0
     var resultColor = mutableStateOf(DarkAquamarine)
 
     private val _basicTasks = getBasicList().toMutableStateList()
@@ -52,7 +52,7 @@ class SelfProgressViewModel: ViewModel() {
         }
     }
 
-    fun сalculatedResult() {
+    fun calculateResult() {
 
         calculateResultPercentage()
         resultColor.value = DarkAquamarine
@@ -87,7 +87,7 @@ class SelfProgressViewModel: ViewModel() {
             resultColor.value = Green
         }
 
-        resultText.value += "\n" + resultPercentage.toString() + "% от цели"
+        resultText.value += "\n$resultPercentage% от цели"
 
         writeSharePreferences()
 /*
@@ -101,34 +101,36 @@ class SelfProgressViewModel: ViewModel() {
                 "${stretchingTasks.get(4).checked} / ${stretchingTasks.get(5).checked} / ${stretchingTasks.get(6).checked}"*/
     }
 
-    fun calculateResultPercentage() {
+    private fun calculateResultPercentage() {
         var resultPercentageDouble = 0.0
-        var tasksAmount: Int = 0
+        var tasksAmount = 0
+        val significantAmountOfBasicCardio = 4
+        val significantAmountOfPressStretching = 3
 
         for (i in basicTasks.indices) {
-            if (basicTasks.get(i).checked && tasksAmount < 4) {
-                resultPercentageDouble += basicTasks.get(i).weight
+            if (basicTasks[i].checked && tasksAmount < significantAmountOfBasicCardio) {
+                resultPercentageDouble += basicTasks[i].weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in cardioTasks.indices) {
-            if (cardioTasks.get(i).checked && tasksAmount < 4) {
-                resultPercentageDouble += cardioTasks.get(i).weight
+            if (cardioTasks[i].checked && tasksAmount < significantAmountOfBasicCardio) {
+                resultPercentageDouble += cardioTasks[i].weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in pressTasks.indices) {
-            if (pressTasks.get(i).checked && tasksAmount < 3) {
-                resultPercentageDouble += pressTasks.get(i).weight
+            if (pressTasks[i].checked && tasksAmount < significantAmountOfPressStretching) {
+                resultPercentageDouble += pressTasks[i].weight
                 tasksAmount++
             }
         }
         tasksAmount = 0
         for (i in stretchingTasks.indices) {
-            if (stretchingTasks.get(i).checked && tasksAmount < 3) {
-                resultPercentageDouble += stretchingTasks.get(i).weight
+            if (stretchingTasks[i].checked && tasksAmount < significantAmountOfPressStretching) {
+                resultPercentageDouble += stretchingTasks[i].weight
                 tasksAmount++
             }
         }
@@ -156,7 +158,7 @@ class SelfProgressViewModel: ViewModel() {
 
     }
 
-    fun writeSharePreferences() {
+    private fun writeSharePreferences() {
         //val sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 

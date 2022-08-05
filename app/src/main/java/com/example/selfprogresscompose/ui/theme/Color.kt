@@ -1,12 +1,12 @@
 package com.example.selfprogresscompose.ui.theme
 
 import androidx.compose.ui.graphics.Color
-
+/*
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
-
+*/
 /*
 val DarkAquamarine =  Color(0xFF026E7D)//025f63) //Color(0xFF056672)
 val LightAquamarine = Color(0xFF06ABC0)

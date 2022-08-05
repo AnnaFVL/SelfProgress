@@ -2,12 +2,9 @@ package com.example.selfprogresscompose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.selfprogresscompose.ui.theme.*
 
@@ -26,16 +23,16 @@ fun DrawTitle() {
     )
 
     Spacer(modifier = Modifier.height(6.dp))
-    Column() {
+    Column {
         Text(text= stringResource(id = R.string.goal_description1),
             style = Typography.body1, color = DarkPurple)
-        Row() {
+        Row {
             Text(text= stringResource(id = R.string.goal_description2),
                 style = Typography.body1)
             Text(text= stringResource(id = R.string.goal_good),
                 style = Typography.body1, modifier = Modifier.padding(start = 4.dp))
         }
-        Row() {
+        Row {
             Text(text= stringResource(id = R.string.goal_description3),
                 style = Typography.body1)
             Text(text= stringResource(id = R.string.goal_normal),

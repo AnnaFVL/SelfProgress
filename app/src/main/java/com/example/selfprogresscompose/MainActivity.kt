@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val fileName : String = "selfProgressSharedPreferences"
+        val fileName = "selfProgressSharedPreferences"
         val context : Context = baseContext
         val sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
 

@@ -1,6 +1,5 @@
 package com.example.selfprogresscompose
 
-//import android.graphics.Color
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.example.selfprogresscompose.ui.theme.DarkAquamarine
 import com.example.selfprogresscompose.ui.theme.Typography
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.selfprogresscompose.ui.theme.DarkPurple
 

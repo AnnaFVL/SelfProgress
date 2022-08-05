@@ -1,8 +1,8 @@
 package com.example.selfprogresscompose
 
-import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,7 +31,7 @@ fun SelfProgressScreen(sharedPreferences: SharedPreferences, modifier: Modifier 
         DrawResultLayout(
             resultText = selfProgressVM.resultText.value,
             resultColor = selfProgressVM.resultColor.value,
-            onButtonClick = { selfProgressVM.сalculatedResult() },
+            onButtonClick = { selfProgressVM.calculateResult() },
             onNewWeekClick = { selfProgressVM.clearCheckBoxes()})
     }
 }

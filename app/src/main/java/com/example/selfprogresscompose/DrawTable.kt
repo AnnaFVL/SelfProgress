@@ -83,8 +83,8 @@ fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportT
             )
         }
         for (index in list.indices) {
-            Checkbox(checked = list.get(index).checked,
-                onCheckedChange = { checked -> onCheckedTask(list.get(index), checked)},
+            Checkbox(checked = list[index].checked,
+                onCheckedChange = { checked -> onCheckedTask(list[index], checked)},
                 colors  = CheckboxDefaults.colors(MintGreen, DarkPurple),
                 modifier = Modifier.fillMaxWidth(1f))
         }
