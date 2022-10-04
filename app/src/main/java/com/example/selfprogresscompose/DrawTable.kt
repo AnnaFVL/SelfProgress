@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.selfprogresscompose.ui.theme.*
+import com.example.selfprogresscompose.Model.SportTask
 
 
 @Composable
@@ -35,10 +36,10 @@ fun DrawTable(basicList: List<SportTask>,
 
         DrawWeekDayColumn(widthOfFirstColumn, heightOfFirstRaw, modifier)
 
-        DrawActivityColumn("зарядка", heightOfFirstRaw, basicList, onCheckedBasicTask, modifier)
-        DrawActivityColumn("кардио", heightOfFirstRaw, cardioList, onCheckedCardioTask, modifier)
-        DrawActivityColumn("пресс", heightOfFirstRaw, pressList, onCheckedPressTask, modifier)
-        DrawActivityColumn("растяжка", heightOfFirstRaw, stretchingList, onCheckedStretchingTask, modifier)
+        DrawActivityColumn("зарядка", heightOfFirstRaw, basicList, onCheckedBasicTask, modifier.fillMaxWidth(0.25f))
+        DrawActivityColumn("кардио", heightOfFirstRaw, cardioList, onCheckedCardioTask, modifier.fillMaxWidth(0.33f))
+        DrawActivityColumn("пресс", heightOfFirstRaw, pressList, onCheckedPressTask, modifier.fillMaxWidth(0.5f))
+        DrawActivityColumn("растяжка", heightOfFirstRaw, stretchingList, onCheckedStretchingTask, modifier.fillMaxWidth(1f))
 
     }
 }
@@ -52,7 +53,8 @@ fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp, modifier: Mo
             .height(heightOfFirstRaw)
             .width(widthOfFirstColumn)
         )
-        Column(modifier = Modifier.fillMaxHeight(1f),
+        Column(
+            modifier = Modifier.fillMaxHeight(1f),
             verticalArrangement = Arrangement.SpaceAround) {
             for (day in WeekDays.dayList) {
                 Text(
@@ -66,7 +68,7 @@ fun DrawWeekDayColumn(widthOfFirstColumn: Dp, heightOfFirstRaw: Dp, modifier: Mo
 
 @Composable
 fun DrawActivityColumn(activity: String, heightOfFirstRaw: Dp, list: List<SportTask>, onCheckedTask: (SportTask, Boolean) -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier.width(60.dp)) { //1f
+    Column(modifier) { //1f
         Box(
             modifier = Modifier
                 .background(Aquamarine)

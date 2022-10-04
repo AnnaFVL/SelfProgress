@@ -1,32 +1,34 @@
 package com.example.selfprogresscompose
 
-import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.selfprogresscompose.Data.SelfProgressDB
+import com.example.selfprogresscompose.Model.SelfProgressViewModel
+import com.example.selfprogresscompose.Model.SportTask
 
 
 @Composable
-fun SelfProgressScreen(sharedPreferences: SharedPreferences, modifier: Modifier = Modifier) {
+fun SelfProgressScreen(dataBase: SelfProgressDB, modifier: Modifier = Modifier) {
 
     val selfProgressVM: SelfProgressViewModel = viewModel()
-    selfProgressVM.sharedPreferences = sharedPreferences
-    selfProgressVM.readSharePreferences()
+    selfProgressVM.selfProgressDB = dataBase
+    selfProgressVM.getAllTasksFromDBIfExists()
 
     Column(modifier = modifier.padding(start = 20.dp, end = 20.dp)) {
         DrawTitle()
         DrawTable(
             basicList = selfProgressVM.basicTasks,
-            onCheckedBasicTask = {task, checked -> selfProgressVM.changeBasicTaskChecked(task, checked)},
+            onCheckedBasicTask = {task : SportTask, checked -> selfProgressVM.changeBasicTaskChecked(task, checked)},
             cardioList = selfProgressVM.cardioTasks,
-            onCheckedCardioTask = {task, checked -> selfProgressVM.changeCardioTaskChecked(task, checked)},
+            onCheckedCardioTask = {task : SportTask, checked -> selfProgressVM.changeCardioTaskChecked(task, checked)},
             pressList = selfProgressVM.pressTasks,
-            onCheckedPressTask = {task, checked -> selfProgressVM.changePressTaskChecked(task, checked)},
+            onCheckedPressTask = {task : SportTask, checked -> selfProgressVM.changePressTaskChecked(task, checked)},
             stretchingList = selfProgressVM.stretchingTasks,
-            onCheckedStretchingTask = {task, checked -> selfProgressVM.changeStretchingTaskChecked(task, checked)},
+            onCheckedStretchingTask = {task : SportTask, checked -> selfProgressVM.changeStretchingTaskChecked(task, checked)},
         )
         DrawResultLayout(
             resultText = selfProgressVM.resultText.value,

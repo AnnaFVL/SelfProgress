@@ -1,16 +1,15 @@
-package com.example.selfprogresscompose
+package com.example.selfprogresscompose.Model
 
-import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import com.example.selfprogresscompose.Data.SelfProgressDB
 import com.example.selfprogresscompose.ui.theme.*
+
 
 class SelfProgressViewModel: ViewModel() {
 
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var selfProgressDB: SelfProgressDB
 
     var resultText = mutableStateOf("Сейчас посчитаем...")
     private var resultPercentage : Int = 0
@@ -32,15 +31,19 @@ class SelfProgressViewModel: ViewModel() {
 
     fun changeBasicTaskChecked(item: SportTask, checked: Boolean) {
         basicTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
+        updateTaskInDB(item, checked)
     }
     fun changeCardioTaskChecked(item: SportTask, checked: Boolean) {
         cardioTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
+        updateTaskInDB(item, checked)
     }
     fun changePressTaskChecked(item: SportTask, checked: Boolean) {
         pressTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
+        updateTaskInDB(item, checked)
     }
     fun changeStretchingTaskChecked(item: SportTask, checked: Boolean) {
         stretchingTasks.find { it.id ==item.id }?.let { task ->task.checked = checked }
+        updateTaskInDB(item, checked)
     }
 
     fun clearCheckBoxes() {
@@ -50,6 +53,7 @@ class SelfProgressViewModel: ViewModel() {
             _pressTasks[index].checked = false
             _stretchingTasks[index].checked = false
         }
+        updateToUncheckedAllTasksInDB()
     }
 
     fun calculateResult() {
@@ -89,16 +93,9 @@ class SelfProgressViewModel: ViewModel() {
 
         resultText.value += "\n$resultPercentage% от цели"
 
-        writeSharePreferences()
-/*
-        resultText.value += "\n ${basicTasks.get(0).checked} / ${basicTasks.get(1).checked} / ${basicTasks.get(2).checked} / ${basicTasks.get(3).checked} /" +
-                "${basicTasks.get(4).checked} / ${basicTasks.get(5).checked} / ${basicTasks.get(6).checked}"
-        resultText.value += "\n ${cardioTasks.get(0).checked} / ${cardioTasks.get(1).checked} / ${cardioTasks.get(2).checked} / ${cardioTasks.get(3).checked} /" +
-                "${cardioTasks.get(4).checked} / ${cardioTasks.get(5).checked} / ${cardioTasks.get(6).checked}"
-        resultText.value += "\n ${pressTasks.get(0).checked} / ${pressTasks.get(1).checked} / ${pressTasks.get(2).checked} / ${pressTasks.get(3).checked} /" +
-                "${pressTasks.get(4).checked} / ${pressTasks.get(5).checked} / ${pressTasks.get(6).checked}"
-        resultText.value += "\n ${stretchingTasks.get(0).checked} / ${stretchingTasks.get(1).checked} / ${stretchingTasks.get(2).checked} / ${stretchingTasks.get(3).checked} /" +
-                "${stretchingTasks.get(4).checked} / ${stretchingTasks.get(5).checked} / ${stretchingTasks.get(6).checked}"*/
+        //writeSharePreferences()
+        // write all to db
+
     }
 
     private fun calculateResultPercentage() {
@@ -140,61 +137,50 @@ class SelfProgressViewModel: ViewModel() {
     }
 
 
-    fun readSharePreferences() {
-
-        //val sharedPreferences = Application.//context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        for (index in _basicTasks.indices) {
-            _basicTasks[index].checked = sharedPreferences.getBoolean("basic$index", false)
+    fun getAllTasksFromDBIfExists() {
+        val taskListFomDB : List<SportTask>? = selfProgressDB.sportDAO?.getAllSportTasks()
+        if (taskListFomDB != null) {
+            for (item in taskListFomDB) {
+                if (item.sportActivity == "basic") { basicTasks.find { it.dayOfWeek ==item.dayOfWeek }?.let { task ->task.checked = item.checked } }
+                if (item.sportActivity == "cardio") { cardioTasks.find { it.dayOfWeek ==item.dayOfWeek }?.let { task ->task.checked = item.checked } }
+                if (item.sportActivity == "press") { pressTasks.find { it.dayOfWeek ==item.dayOfWeek }?.let { task ->task.checked = item.checked } }
+                if (item.sportActivity == "stretching") { stretchingTasks.find { it.dayOfWeek ==item.dayOfWeek }?.let { task ->task.checked = item.checked } }
+            }
+        } else {
+            addAllTasksToDB()
         }
-        for (index in _cardioTasks.indices) {
-            _cardioTasks[index].checked = sharedPreferences.getBoolean("cardio$index", false)
-        }
-        for (index in _pressTasks.indices) {
-            _pressTasks[index].checked = sharedPreferences.getBoolean("press$index", false)
-        }
-        for (index in _stretchingTasks.indices) {
-            _stretchingTasks[index].checked = sharedPreferences.getBoolean("stretching$index", false)
-        }
-
     }
 
-    private fun writeSharePreferences() {
-        //val sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+    /*
+    private fun deleteAllTasksFromDB() {
+        for (item in basicTasks) { selfProgressDB.sportDAO?.deleteSportTask(item) }
+        for (item in cardioTasks) { selfProgressDB.sportDAO?.deleteSportTask(item) }
+        for (item in pressTasks) { selfProgressDB.sportDAO?.deleteSportTask(item) }
+        for (item in stretchingTasks) { selfProgressDB.sportDAO?.deleteSportTask(item) }
+    }*/
 
-        for (index in _basicTasks.indices) {
-            editor.putBoolean("basic$index", _basicTasks[index].checked)
-        }
-        for (index in _cardioTasks.indices) {
-            editor.putBoolean("cardio$index", _cardioTasks[index].checked)
-        }
-        for (index in _pressTasks.indices) {
-            editor.putBoolean("press$index", _pressTasks[index].checked)
-        }
-        for (index in _stretchingTasks.indices) {
-            editor.putBoolean("stretching$index", _stretchingTasks[index].checked)
-        }
-        editor.apply()
+    private fun updateToUncheckedAllTasksInDB() {
+        for (item in basicTasks) { selfProgressDB.sportDAO?.updateSportTask(item) }
+        for (item in cardioTasks) { selfProgressDB.sportDAO?.updateSportTask(item) }
+        for (item in pressTasks) { selfProgressDB.sportDAO?.updateSportTask(item) }
+        for (item in stretchingTasks) { selfProgressDB.sportDAO?.updateSportTask(item) }
     }
-}
 
-/*
-object SportList {
-    val sportList = listOf("basic", "cardio", "press", "stretching")
-}*/
+    private fun addAllTasksToDB() {
+        for (item in basicTasks) { selfProgressDB.sportDAO?.addSportTask(item) }
+        for (item in cardioTasks) { selfProgressDB.sportDAO?.addSportTask(item) }
+        for (item in pressTasks) { selfProgressDB.sportDAO?.addSportTask(item) }
+        for (item in stretchingTasks) { selfProgressDB.sportDAO?.addSportTask(item) }
+    }
 
-class SportTask(val id: Int, val label: String, initialChecked: Boolean = false) {
-    var checked by mutableStateOf(initialChecked)
-    val weight: Double = when (label) {
-        "basic" -> 6.25
-        "cardio" -> 6.25
-        "press" -> 8.4
-        "stretching" -> 8.4
-        else -> 1.0
+    private fun updateTaskInDB(item: SportTask, checked: Boolean) {
+        item.checked = checked
+        selfProgressDB.sportDAO?.updateSportTask(item)
     }
 }
 
-private fun getBasicList() = List(7) { i -> SportTask(i, "basic") }
-private fun getCardioList() = List(7) { i -> SportTask(i, "cardio") }
-private fun getPressList() = List(7) { i -> SportTask(i, "press") }
-private fun getStretchingList() = List(7) { i -> SportTask(i, "stretching") }
+
+private fun getBasicList() = List(7) { i -> SportTask(sportActivity = "basic", dayOfWeek = i, checked = false, weight = 6.25) }
+private fun getCardioList() = List(7) { i -> SportTask(sportActivity = "cardio", dayOfWeek = i, checked = false, weight = 6.25) }
+private fun getPressList() = List(7) { i -> SportTask(sportActivity = "press", dayOfWeek = i, checked = false, weight = 8.4) }
+private fun getStretchingList() = List(7) { i -> SportTask(sportActivity = "stretching", dayOfWeek = i, checked = false, weight = 8.4) }

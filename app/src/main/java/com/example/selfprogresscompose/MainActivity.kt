@@ -11,15 +11,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.room.Room
+import com.example.selfprogresscompose.Data.SelfProgressDB
 import com.example.selfprogresscompose.ui.theme.*
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val fileName = "selfProgressSharedPreferences"
-        val context : Context = baseContext
-        val sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+        //val context : Context = baseContext
+        val selfProgressDB : SelfProgressDB = Room.databaseBuilder(applicationContext, SelfProgressDB::class.java, "tasksDB").allowMainThreadQueries().build()
 
         setContent {
             SelfProgressComposeTheme {
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    SelfProgressScreen(sharedPreferences)
+                    SelfProgressScreen(selfProgressDB)
                 }
             }
         }
